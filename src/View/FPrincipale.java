@@ -1,18 +1,15 @@
 package View;
 
-import Model.*;
-
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class FPrincipale extends JFrame {
 
@@ -54,11 +51,20 @@ public class FPrincipale extends JFrame {
 		JButton btnNouveauConcours = new JButton("Nouveau concours");
 		btnNouveauConcours.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				FConcours frame=new FConcours();
-				frame.setVisible(true);
+				FConcours frameConcours=new FConcours();
+				frameConcours.setVisible(true);
 			}
 		});
-		btnNouveauConcours.setBounds(47, 122, 157, 34);
+		btnNouveauConcours.setBounds(168, 107, 157, 34);
 		contentPane.add(btnNouveauConcours);
+		
+		JButton btnNouveauJoueur = new JButton("Nouveau joueur");
+		btnNouveauJoueur.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FJoueur frameJoueur=new FJoueur();
+				frameJoueur.setVisible(true);			}
+		});
+		btnNouveauJoueur.setBounds(168, 179, 157, 34);
+		contentPane.add(btnNouveauJoueur);
 	}
 }

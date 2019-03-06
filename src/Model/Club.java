@@ -13,7 +13,6 @@ public Club() {
 }
 
 public Club(int clubNum, Joueur clubJoueurs, Equipe clubEquipe) {
-	super();
 	ClubNum = clubNum;
 	ClubJoueurs = clubJoueurs;
 	ClubEquipe = clubEquipe;

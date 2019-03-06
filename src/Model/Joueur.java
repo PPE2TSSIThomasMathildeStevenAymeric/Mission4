@@ -17,7 +17,6 @@ public Joueur() {
 }
 
 public Joueur(int jNum, Boolean jSexe, String jCat, Club jClub, Equipe jEquipe) {
-	super();
 	JNum = jNum;
 	JSexe = jSexe;
 	JCat = jCat;

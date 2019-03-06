@@ -15,7 +15,6 @@ public Equipe() {
 }
 
 public Equipe(int eNum, Club eClubNum, Joueur eJNum, Club myClub) {
-	super();
 	ENum = eNum;
 	EClubNum = eClubNum;
 	EJNum = eJNum;

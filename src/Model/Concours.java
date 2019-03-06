@@ -15,7 +15,6 @@ public Concours(){
 }
 
 public Concours(int concNum, String concCat, String concClassif, String concType) {
-	super();
 	ConcNum = concNum;
 	ConcCat = concCat;
 	ConcClassif = concClassif;
