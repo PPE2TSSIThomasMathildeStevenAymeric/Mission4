@@ -7,6 +7,7 @@ public class Principal {
 		
 		Club club1=new Club();
 		
+		ConnexionSQL conn=new ConnexionSQL();
 
 	}
 

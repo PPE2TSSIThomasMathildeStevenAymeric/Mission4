@@ -1,58 +1,60 @@
 package Model;
 
+import java.util.ArrayList;
+
+
 public class Equipe {
 
-  protected int ENum;
-
-  protected Club EClubNum;
-
-  protected Joueur EJNum;
-
-    public Club myClub;
-
-public Equipe() {
+	protected int idEquipe;
+	protected String nomEquipe;
+	protected int idConcours;
+	protected ArrayList<Joueur> lesJoueurs;
 	
-}
+	public Equipe(String nomEquipe, int idConcours, ArrayList<Joueur> desJoueurs ) {
+		this.nomEquipe = nomEquipe;
+		this.idConcours = idConcours;
+		this.lesJoueurs = desJoueurs;
+	}
 
-public Equipe(int eNum, Club eClubNum, Joueur eJNum, Club myClub) {
-	ENum = eNum;
-	EClubNum = eClubNum;
-	EJNum = eJNum;
-	this.myClub = myClub;
-}
+	public int getIdEquipe() {
+		return idEquipe;
+	}
 
-public int getENum() {
-	return ENum;
-}
+	public void setIdEquipe(int idEquipe) {
+		this.idEquipe = idEquipe;
+	}
 
-public void setENum(int eNum) {
-	ENum = eNum;
-}
+	public String getNomEquipe() {
+		return nomEquipe;
+	}
 
-public Club getEClubNum() {
-	return EClubNum;
-}
+	public void setNomEquipe(String nomEquipe) {
+		this.nomEquipe = nomEquipe;
+	}
 
-public void setEClubNum(Club eClubNum) {
-	EClubNum = eClubNum;
-}
+	public int getIdConcours() {
+		return idConcours;
+	}
 
-public Joueur getEJNum() {
-	return EJNum;
-}
+	public void setIdConcours(int idConcours) {
+		this.idConcours = idConcours;
+	}
 
-public void setEJNum(Joueur eJNum) {
-	EJNum = eJNum;
-}
+	public ArrayList<Joueur> getLesJoueurs() {
+		return lesJoueurs;
+	}
 
-public Club getMyClub() {
-	return myClub;
-}
-
-public void setMyClub(Club myClub) {
-	this.myClub = myClub;
-}
-
-
-
+	public void setLesJoueurs(ArrayList<Joueur> lesJoueurs) {
+		this.lesJoueurs = lesJoueurs;
+	}
+	
+	public void addJoueur(Joueur unJoueur) {
+		this.lesJoueurs.add(unJoueur);
+	}
+	
+	public String ToString() {
+		return this.nomEquipe;
+	}
+	
+	
 }

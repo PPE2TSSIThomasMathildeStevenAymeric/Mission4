@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Model.ConnexionSQL;
+
 public class FPrincipale extends JFrame {
 
 	private JPanel contentPane;
@@ -30,7 +32,7 @@ public class FPrincipale extends JFrame {
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -61,10 +63,11 @@ public class FPrincipale extends JFrame {
 		JButton btnNouveauJoueur = new JButton("Nouveau joueur");
 		btnNouveauJoueur.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				FJoueur frameJoueur=new FJoueur();
-				frameJoueur.setVisible(true);			}
+				ConnexionSQL conn =new ConnexionSQL();
+				}
 		});
 		btnNouveauJoueur.setBounds(168, 179, 157, 34);
 		contentPane.add(btnNouveauJoueur);
+		
 	}
 }
