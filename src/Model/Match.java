@@ -55,10 +55,11 @@ public class Match {
 		
 		while (listeEquipeRestante.size() < 2) {
 			int nbequipe = listeEquipeRestante.size();
+			
 			Equipe equipe1 = null;
 			Equipe equipe2 = null;
 			
-			// On fait un while pour éviter 
+			// On fait un while pour éviter qu'une équipe fasse un match ... contre elle même
 			while (equipe1 == equipe2) {
 				equipe1 = listeEquipeRestante.get(ThreadLocalRandom.current().nextInt(0, nbequipe));
 				equipe2 = listeEquipeRestante.get(ThreadLocalRandom.current().nextInt(0, nbequipe));
@@ -73,6 +74,7 @@ public class Match {
 		
 		if (listeEquipeRestante.size() == 1) {
 			// Faire gagner l'équipe = match blanc
+			// créer un match mais mettre directement gg l'équipe
 		}
 		
 		return listeMatch;

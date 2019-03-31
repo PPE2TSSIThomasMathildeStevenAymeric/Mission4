@@ -25,9 +25,15 @@ public class ConnexionSQL {
 			
 			public ConnexionSQL() {
 		        this.nomBDD = "ffbsq";     // mettre le nom de la bdd entre les double-quote
+		        /*
+		        this.login = "prof1234";
+		        this.mdp = "prof1234";
+		        this.url = "172.29.103.20";
+		        */
 		        this.login = "root";
 		        this.mdp = "root";
 		        this.url = "127.0.0.1";
+		        
 		        this.SeConnecter();
 		    }
 			

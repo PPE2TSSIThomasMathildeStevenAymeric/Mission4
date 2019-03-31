@@ -35,7 +35,7 @@ public class Concours {
 		ConnexionSQL bdd = new ConnexionSQL();
 
 		// On va rechercher l'id dans la bdd
-		String requete2 = "SELECT id_concours,date_concours,nature,categorie,sexe FROM Concours WHERE id_concours=" + pID;
+		String requete2 = "SELECT id_concours,date_concours,nature,categorie,sexe FROM concours WHERE id_concours=" + pID;
 		ResultSet result = bdd.requeteRetourneDonnees(requete2);
 		result.next();
 		
@@ -98,6 +98,12 @@ public class Concours {
 
 	public void setConcSexe(String concSexe) {
 		this.ConcSexe = concSexe;
+	}
+
+	@Override
+	public String toString() {
+		return "Concours [Num=" + ConcNum + ", Nature=" + ConcNature + ", Categorie=" + ConcCat + ", Sexe="
+				+ ConcSexe + "]";
 	}
 
 }

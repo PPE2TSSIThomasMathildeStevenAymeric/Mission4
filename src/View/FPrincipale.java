@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,7 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Model.Concours;
 import Model.ConnexionSQL;
+import javax.swing.JSeparator;
+import javax.swing.JComboBox;
 
 public class FPrincipale extends JFrame {
 
@@ -57,17 +63,67 @@ public class FPrincipale extends JFrame {
 				frameConcours.setVisible(true);
 			}
 		});
-		btnNouveauConcours.setBounds(168, 107, 157, 34);
+		btnNouveauConcours.setBounds(182, 102, 157, 34);
 		contentPane.add(btnNouveauConcours);
 		
 		JButton btnNouveauJoueur = new JButton("Nouveau joueur");
 		btnNouveauJoueur.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ConnexionSQL conn =new ConnexionSQL();
+					FJoueur frameCreationJoueur=new FJoueur();
+					frameCreationJoueur.setVisible(true);
 				}
 		});
-		btnNouveauJoueur.setBounds(168, 179, 157, 34);
+		btnNouveauJoueur.setBounds(182, 201, 157, 34);
 		contentPane.add(btnNouveauJoueur);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 165, 543, 2);
+		contentPane.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(-12, 71, 555, 5);
+		contentPane.add(separator_1);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(0, 262, 543, 2);
+		contentPane.add(separator_2);
+		
+		JButton btnVoirConcours = new JButton("Voir Concours");
+		btnVoirConcours.setBounds(182, 346, 157, 34);
+		contentPane.add(btnVoirConcours);
+		
+		JComboBox comboBoxListConcours = new JComboBox();
+		comboBoxListConcours.setBounds(58, 291, 392, 22);
+		contentPane.add(comboBoxListConcours);
+		
+		String requete = "SELECT id_concours FROM concours";
+		try {
+			ConnexionSQL bdd = new ConnexionSQL();
+			ResultSet resultbdd = bdd.requeteRetourneDonnees(requete);
+			
+			while(resultbdd.next()) {
+				int id_concours = resultbdd.getInt(1);
+				Concours leConcours = Concours.getConcoursDB(id_concours);
+				
+				comboBoxListConcours.addItem(leConcours);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		btnVoirConcours.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Concours leConcours = (Concours) comboBoxListConcours.getSelectedItem(); 
+				
+				if (leConcours != null) {
+					FGestionConcours frameGestionConcours =new FGestionConcours(leConcours);
+					frameGestionConcours.setVisible(true);
+				}
+			}
+		});
+		
 		
 	}
 }

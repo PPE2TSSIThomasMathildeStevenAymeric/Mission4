@@ -46,8 +46,8 @@ public class FCreationEquipe extends JFrame {
 
 	private JPanel contentPane;
 
-	private modeleJoueur modele = new modeleJoueur();
-	private JTable tableJoueurs = new JTable(modele);
+	private modeleJoueur modeleJoueurs = new modeleJoueur();
+	private JTable tableJoueurs = new JTable(modeleJoueurs);
 
 	public static DefaultListModel modeleEquipe = new DefaultListModel();
 	private JList listEquipes = new JList(modeleEquipe);
