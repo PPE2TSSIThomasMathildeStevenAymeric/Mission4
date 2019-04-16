@@ -40,9 +40,9 @@ public class Joueur {
 	public static Joueur[] getAllJoueur() throws SQLException {
 		ArrayList<Joueur> lesJoueursTmp = new ArrayList<Joueur>();  
 		
-		String requete = "SELECT numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, categorielicencie, id_ClubLicencie FROM licencie INNER JOIN club ON licencie.id_ClubLicencie = club.numAffiliation_Club";
-		//System.out.println(requete);
-		ResultSet tmp = bdd.requeteRetourneDonnees(requete);
+		//String requete = "SELECT numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, categorielicencie, id_ClubLicencie FROM licencie INNER JOIN club ON licencie.id_ClubLicencie = club.numAffiliation_Club";
+		String requeteStocke = "CALL getAllJoueur()";
+		ResultSet tmp = bdd.requeteRetourneDonnees(requeteStocke);
 		
 		while(tmp.next()) {
 			int id = tmp.getInt(1);
@@ -69,9 +69,9 @@ public class Joueur {
 	}
 	
 	public static Joueur getJoueurByID(int pID) throws SQLException {
-		String requete = "SELECT numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, categorielicencie, id_ClubLicencie FROM licencie INNER JOIN club ON licencie.id_ClubLicencie = club.numAffiliation_Club WHERE numlicencie=" + pID;
-		
-		ResultSet tmp = bdd.requeteRetourneDonnees(requete);
+		// String requete = "SELECT numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, categorielicencie, id_ClubLicencie FROM licencie INNER JOIN club ON licencie.id_ClubLicencie = club.numAffiliation_Club WHERE numlicencie=" + pID;
+		String requeteStocke = "CALL getJoueurById(" + pID + ")";
+		ResultSet tmp = bdd.requeteRetourneDonnees(requeteStocke);
 		
 		tmp.next();
 		

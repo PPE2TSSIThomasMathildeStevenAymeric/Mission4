@@ -146,15 +146,19 @@ public class FConcours extends JFrame {
 				try {
 					// Se connecter à la bdd
 					// Faire un INSERT INTO avec les parametres
-					String requete = "INSERT INTO Concours (date_concours, Categorie, nature, sexe) VALUES ('" + dateDB + "','"
-							+ categorie + "','" + pnature + "','" + sexe + "')";
+					
+					//	String requete = "INSERT INTO Concours (date_concours, Categorie, nature, sexe) VALUES ('" + dateDB + "','"
+					//		+ categorie + "','" + pnature + "','" + sexe + "')";
+					
+					String requeteStocke = "CALL ajouterConcours('" + dateDB + "','" + categorie + "','" + pnature + "','" + sexe + ")";
 					ConnexionSQL bdd = new ConnexionSQL();
 
-					bdd.requeteSansDonnes(requete);
+					bdd.requeteSansDonnes(requeteStocke);
 					
 					// On va rechercher l'id dans la bdd
-					String requete2 = "SELECT id_concours FROM Concours ORDER BY id_concours DESC LIMIT 1 ";
-					ResultSet pId = bdd.requeteRetourneDonnees(requete2);
+					// String requete2 = "SELECT id_concours FROM Concours ORDER BY id_concours DESC LIMIT 1 ";
+					String requete2Stocke = "CALL getLastConcoursID()";
+					ResultSet pId = bdd.requeteRetourneDonnees(requete2Stocke);
 					pId.next();
 					
 					int ID = pId.getInt(1);

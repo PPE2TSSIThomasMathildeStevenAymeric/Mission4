@@ -96,14 +96,21 @@ public class FPrincipale extends JFrame {
 		comboBoxListConcours.setBounds(58, 291, 392, 22);
 		contentPane.add(comboBoxListConcours);
 		
-		String requete = "SELECT id_concours FROM concours";
+		// String requete = "SELECT id_concours FROM concours"; 
+		String requeteStocke = "CALL getConcours()";
 		try {
 			ConnexionSQL bdd = new ConnexionSQL();
-			ResultSet resultbdd = bdd.requeteRetourneDonnees(requete);
+			ResultSet resultbdd = bdd.requeteRetourneDonnees(requeteStocke);
 			
 			while(resultbdd.next()) {
+				
 				int id_concours = resultbdd.getInt(1);
-				Concours leConcours = Concours.getConcoursDB(id_concours);
+				Date pDate = resultbdd.getDate(2);
+				String pNature = resultbdd.getString(3);
+				String pCategorie = resultbdd.getString(4);
+				String pSexe = resultbdd.getString(5);
+				
+				Concours leConcours = new Concours(id_concours, "", pDate, pNature, pCategorie, pSexe);
 				
 				comboBoxListConcours.addItem(leConcours);
 				

@@ -121,7 +121,7 @@ public class FCreationEquipe extends JFrame {
 
 			Equipe pEquipe = (Equipe) value;
 
-			String labelText = pEquipe.getNomEquipe();
+			String labelText = pEquipe.getNomEquipe() + " - " + pEquipe.getIdEquipe();
 			setText(labelText);
 
 			list.repaint();
@@ -179,24 +179,25 @@ public class FCreationEquipe extends JFrame {
 	 * @throws SQLException
 	 */
 	public FCreationEquipe(Concours leConcours) throws SQLException {
+		setTitle("Gestion des \u00E9quipes du concours");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 996, 527);
+		setBounds(100, 100, 1037, 525);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		listEquipes.setBounds(12, 57, 157, 366);
+		listEquipes.setBounds(8, 57, 182, 366);
 		contentPane.add(listEquipes);
 		listEquipes.setCellRenderer(new affichageEquipe()); // Permet de modifier l'affichage des JList
 
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(177, 0, 2, 458);
+		separator.setBounds(198, 0, 2, 458);
 		contentPane.add(separator);
 
 		JLabel lblNom = new JLabel("Nom :");
-		lblNom.setBounds(191, 58, 56, 16);
+		lblNom.setBounds(223, 58, 56, 16);
 		contentPane.add(lblNom);
 
 		tableJoueurs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -204,7 +205,7 @@ public class FCreationEquipe extends JFrame {
 		tableJoueurs.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		JScrollPane scrollPane = new JScrollPane(tableJoueurs);
-		scrollPane.setBounds(463, 47, 503, 338);
+		scrollPane.setBounds(504, 47, 503, 338);
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		// Filtre
 		tableJoueurs.setRowSorter(sorter);
@@ -213,57 +214,63 @@ public class FCreationEquipe extends JFrame {
 		actualiseTableau(leConcours);
 
 		txtNomEquipe = new JTextField();
-		txtNomEquipe.setBounds(246, 55, 182, 22);
+		txtNomEquipe.setBounds(278, 55, 182, 22);
 		contentPane.add(txtNomEquipe);
 		txtNomEquipe.setColumns(10);
 
 		JLabel lblListeDesJoueurs = new JLabel("Liste des joueurs :");
-		lblListeDesJoueurs.setBounds(191, 106, 171, 16);
+		lblListeDesJoueurs.setBounds(223, 106, 171, 16);
 		contentPane.add(lblListeDesJoueurs);
 
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(449, 0, 2, 458);
+		separator_1.setBounds(481, 0, 2, 458);
 		contentPane.add(separator_1);
 
 		JLabel lblCrationDquipe = new JLabel("Cr\u00E9ation d'\u00E9quipe");
 		lblCrationDquipe
 				.setFont(lblCrationDquipe.getFont().deriveFont(lblCrationDquipe.getFont().getStyle() | Font.BOLD));
-		lblCrationDquipe.setBounds(246, 14, 142, 16);
+		lblCrationDquipe.setBounds(278, 14, 142, 16);
 		contentPane.add(lblCrationDquipe);
 
 		JLabel lblListeDesquipes = new JLabel("Liste des \u00E9quipes");
+		lblListeDesquipes.setHorizontalAlignment(SwingConstants.CENTER);
 		lblListeDesquipes
 				.setFont(lblListeDesquipes.getFont().deriveFont(lblListeDesquipes.getFont().getStyle() | Font.BOLD));
-		lblListeDesquipes.setBounds(24, 16, 142, 16);
+		lblListeDesquipes.setBounds(8, 14, 182, 16);
 		contentPane.add(lblListeDesquipes);
 
 		JLabel lblListeDesJoueurs_1 = new JLabel("Liste des joueurs");
 		lblListeDesJoueurs_1.setFont(
 				lblListeDesJoueurs_1.getFont().deriveFont(lblListeDesJoueurs_1.getFont().getStyle() | Font.BOLD));
-		lblListeDesJoueurs_1.setBounds(596, 14, 142, 16);
+		lblListeDesJoueurs_1.setBounds(637, 14, 142, 16);
 		contentPane.add(lblListeDesJoueurs_1);
 
 		listJoueursEquipe = new JList<Joueur>(listModelJoueursEquipe);
-		listJoueursEquipe.setBounds(191, 135, 237, 222);
+		listJoueursEquipe.setBounds(223, 135, 237, 222);
 		listJoueursEquipe.setCellRenderer(new affichageJoueur());
 		contentPane.add(listJoueursEquipe);
 
 		JButton btnCreerLequipe = new JButton("Cr\u00E9er l'\u00E9quipe");
-		btnCreerLequipe.setBounds(235, 433, 142, 25);
+		btnCreerLequipe.setEnabled(false);
+		btnCreerLequipe.setBounds(267, 433, 142, 25);
 		contentPane.add(btnCreerLequipe);
 
 		JButton btnAjouterLeJoueur = new JButton("Ajouter le joueur");
-		btnAjouterLeJoueur.setBounds(669, 398, 142, 25);
+		btnAjouterLeJoueur.setBounds(710, 398, 142, 25);
 		contentPane.add(btnAjouterLeJoueur);
 
 		JButton btnRetirerLeJoueur = new JButton("Retirer le joueur");
-		btnRetirerLeJoueur.setBounds(235, 370, 142, 25);
+		btnRetirerLeJoueur.setBounds(267, 370, 142, 25);
 		contentPane.add(btnRetirerLeJoueur);
 
 		JButton btnRetirerLquipe = new JButton("Retirer l'\u00E9quipe");
-		btnRetirerLquipe.setBounds(22, 433, 119, 25);
+		btnRetirerLquipe.setBounds(36, 433, 119, 25);
 		contentPane.add(btnRetirerLquipe);
+		
+		for(Equipe loadEquipe : Equipe.getAllEquipeByConcoursID(leConcours.getConcNum())) {
+			modeleEquipe.addElement(loadEquipe);
+		}
 
 		btnAjouterLeJoueur.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -296,6 +303,7 @@ public class FCreationEquipe extends JFrame {
 						listModelJoueursEquipe.addElement(unJoueur); 
 						if (listModelJoueursEquipe.size() == nbJoueurParEquipe) {
 							btnAjouterLeJoueur.setEnabled(false);
+							btnCreerLequipe.setEnabled(true);
 							// Si nbJoueurs = nbJoueursMax, on grise le bouton qui permet d'ajouter des joueurs
 						}
 
@@ -321,14 +329,51 @@ public class FCreationEquipe extends JFrame {
 				}
 
 				Equipe pEquipe = new Equipe(equipeNom, leConcours.getConcNum(), lesJoueurs);
+				try {
+					pEquipe.addToDB();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				modeleEquipe.addElement(pEquipe);
 				
 				listModelJoueursEquipe.clear(); // On vide la JList Joueurs
-
+				
+				txtNomEquipe.setText("");
 				
 				pClub = ""; // On enleve le filtre du club puis on actualise le tableau
 				actualiseTableau(leConcours);
 				btnAjouterLeJoueur.setEnabled(true); // On réactive le bouton "Ajouter le joueur"
+				btnCreerLequipe.setEnabled(false);
+			}
+		});
+		
+		btnRetirerLquipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Equipe pEquipe = (Equipe) listEquipes.getSelectedValue();
+				try {
+					pEquipe.removeFromDB();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				modeleEquipe.removeElement(pEquipe);
+				
+				
+			}
+		});
+		
+		btnRetirerLeJoueur.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Joueur pJoueur = listJoueursEquipe.getSelectedValue();
+				listModelJoueursEquipe.removeElement(pJoueur);
+			
+				
+				if (listModelJoueursEquipe.size() == 0) {
+					pClub = ""; // On rajoute un filtre sur le club
+					actualiseTableau(leConcours); // On actualise le tableau
+				}
 			}
 		});
 

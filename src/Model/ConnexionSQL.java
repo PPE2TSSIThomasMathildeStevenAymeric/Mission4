@@ -24,7 +24,7 @@ public class ConnexionSQL {
 			}
 			
 			public ConnexionSQL() {
-		        this.nomBDD = "ffbsq";     // mettre le nom de la bdd entre les double-quote
+		        this.nomBDD = "ffbsq2";     // mettre le nom de la bdd entre les double-quote
 		        /*
 		        this.login = "prof1234";
 		        this.mdp = "prof1234";
@@ -80,6 +80,7 @@ public class ConnexionSQL {
 			public void fermerConnexion() throws SQLException{
 				state.close();
 				result.close();
+				System.out.println("Fermeeture ok");
 			}
 		}
 

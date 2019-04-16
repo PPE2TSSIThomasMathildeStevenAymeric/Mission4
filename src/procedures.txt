@@ -1,0 +1,16 @@
+CREATE PROCEDURE `getConcours`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe FROM concours inner join categorie as c on c.id = concours.categorie; END 
+
+CREATE PROCEDURE `ajouterEquipe`(IN `pNom` VARCHAR(255), IN `pIdConcours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (nom, IdConcours) VALUES (pNom,pIdConcours); END 
+
+CREATE PROCEDURE `getLastEquipeID`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe FROM equipe ORDER BY id_equipe DESC LIMIT 1; END 
+
+CREATE PROCEDURE `removeEquipe`(IN `pId_equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DELETE FROM equipe WHERE id_equipe=pId_equipe; END 
+
+ALTER TABLE `joueursequipe` DROP FOREIGN KEY `FK_joueursEquipe_IdEquipe`; ALTER TABLE `joueursequipe` ADD CONSTRAINT `FK_joueursEquipe_IdEquipe` FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id_equipe`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+CREATE PROCEDURE `ajouterJoueurEquipe`(IN `pId_equipe` INT, IN `pNumLicencie` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO joueursequipe (id_equipe, numLicencie) VALUES (pId_equipe,pNumLicencie); END 
+
+CREATE PROCEDURE `getAllEquipeByConcoursID`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe,nom,IdConcours FROM equipe WHERE IdConcours = pId_Concours; END 
+
+CREATE PROCEDURE `getAllJoueursInEquipe`(IN `pId_Equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT licencie.numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, c.libelle, id_ClubLicencie FROM club INNER JOIN licencie ON licencie.id_ClubLicencie = club.numAffiliation_Club INNER JOIN categorie as c on c.id = licencie.categorielicencie INNER JOIN joueursequipe as je on je.numLicencie = licencie.numlicencie WHERE je.id_equipe = pId_Equipe; END 
+

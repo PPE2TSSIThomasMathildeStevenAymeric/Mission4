@@ -17,8 +17,7 @@ public class Concours {
 
 	}
 
-	public Concours(int pID, String ConcNom, Date concDate, String concNature, String concCat, String concSexe)
-			throws SQLException {
+	public Concours(int pID, String ConcNom, Date concDate, String concNature, String concCat, String concSexe) {
 
 		this.ConcNom = ConcNom;
 		this.ConcDate = concDate;
@@ -35,8 +34,9 @@ public class Concours {
 		ConnexionSQL bdd = new ConnexionSQL();
 
 		// On va rechercher l'id dans la bdd
-		String requete2 = "SELECT id_concours,date_concours,nature,categorie,sexe FROM concours WHERE id_concours=" + pID;
-		ResultSet result = bdd.requeteRetourneDonnees(requete2);
+		// String requete2 = "SELECT id_concours,date_concours,nature,categorie,sexe FROM concours WHERE id_concours=" + pID;
+		String requete2Stocke =  "CALL getConcoursById(" + pID + ")";
+		ResultSet result = bdd.requeteRetourneDonnees(requete2Stocke);
 		result.next();
 		
 		int pID_database = result.getInt(1);
