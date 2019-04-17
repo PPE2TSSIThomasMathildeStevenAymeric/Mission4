@@ -131,5 +131,42 @@ public class Equipe {
 		return lesEquipesTmp;
 	}
 	
+	public static Equipe getEquipeByID(int pID) throws SQLException {
+		Equipe uneEquipe = null;
+		
+		String requeteStocke = "CALL getEquipeByID(" + pID + ")";
+		ConnexionSQL bdd = new ConnexionSQL();
+		ResultSet tmp = bdd.requeteRetourneDonnees(requeteStocke);
+		
+		while(tmp.next()) {
+			int id_equipe = tmp.getInt(1);
+			String nom_equipe = tmp.getString(2);
+			int id_concours = tmp.getInt(3);
+			
+			ArrayList<Joueur> lesJoueurstmp = new ArrayList<Joueur>();
+			String requeteStocke2 = "CALL getAllJoueursInEquipe(" + id_equipe + ")";
+			ResultSet tmp2 = bdd.requeteRetourneDonnees(requeteStocke2);
+			
+			while(tmp2.next()) {
+				int id = tmp2.getInt(1);
+				String prenom = tmp2.getString(2);
+				String nom = tmp2.getString(3);
+				String nomClub = tmp2.getString(4);
+				String sexe = tmp2.getString(5);
+				String categorieNom = tmp2.getString(6);
+				int numClub = tmp2.getInt(7);
+				
+				Joueur unJoueur = new Joueur(id, prenom, nom, nomClub, sexe, categorieNom, numClub);
+				lesJoueurstmp.add(unJoueur);
+			}
+			
+			 uneEquipe = new Equipe(id_equipe, nom_equipe, id_concours, lesJoueurstmp);
+			
+		}
+		bdd.fermerConnexion();
+	
+		return uneEquipe;
+	}
+	
 	
 }

@@ -1,32 +1,41 @@
-CREATE PROCEDURE `getConcours`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe FROM concours inner join categorie as c on c.id = concours.categorie; END 
+CREATE PROCEDURE `getConcours`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe FROM concours inner join categorie as c on c.id = concours.categorie; END| 
 
-CREATE PROCEDURE `ajouterEquipe`(IN `pNom` VARCHAR(255), IN `pIdConcours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (nom, IdConcours) VALUES (pNom,pIdConcours); END 
+CREATE PROCEDURE `ajouterEquipe`(IN `pNom` VARCHAR(255), IN `pIdConcours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (nom, IdConcours) VALUES (pNom,pIdConcours); END| 
 
-CREATE PROCEDURE `getLastEquipeID`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe FROM equipe ORDER BY id_equipe DESC LIMIT 1; END 
+CREATE PROCEDURE `getLastEquipeID`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe FROM equipe ORDER BY id_equipe DESC LIMIT 1; END| 
 
-CREATE PROCEDURE `removeEquipe`(IN `pId_equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DELETE FROM equipe WHERE id_equipe=pId_equipe; END 
+CREATE PROCEDURE `removeEquipe`(IN `pId_equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DELETE FROM equipe WHERE id_equipe=pId_equipe; END| 
 
-ALTER TABLE `joueursequipe` DROP FOREIGN KEY `FK_joueursEquipe_IdEquipe`; ALTER TABLE `joueursequipe` ADD CONSTRAINT `FK_joueursEquipe_IdEquipe` FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id_equipe`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `joueursequipe` DROP FOREIGN KEY `FK_joueursEquipe_IdEquipe`; ALTER TABLE `joueursequipe` ADD CONSTRAINT `FK_joueursEquipe_IdEquipe` FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id_equipe`) ON DELETE CASCADE ON UPDATE RESTRICT|
 
-CREATE PROCEDURE `ajouterJoueurEquipe`(IN `pId_equipe` INT, IN `pNumLicencie` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO joueursequipe (id_equipe, numLicencie) VALUES (pId_equipe,pNumLicencie); END 
+CREATE PROCEDURE `ajouterJoueurEquipe`(IN `pId_equipe` INT, IN `pNumLicencie` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO joueursequipe (id_equipe, numLicencie) VALUES (pId_equipe,pNumLicencie); END| 
 
-CREATE PROCEDURE `getAllEquipeByConcoursID`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe,nom,IdConcours FROM equipe WHERE IdConcours = pId_Concours; END 
+CREATE PROCEDURE `getAllEquipeByConcoursID`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe,nom,IdConcours FROM equipe WHERE IdConcours = pId_Concours; END| 
 
-CREATE PROCEDURE `getAllJoueursInEquipe`(IN `pId_Equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT licencie.numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, c.libelle, id_ClubLicencie FROM club INNER JOIN licencie ON licencie.id_ClubLicencie = club.numAffiliation_Club INNER JOIN categorie as c on c.id = licencie.categorielicencie INNER JOIN joueursequipe as je on je.numLicencie = licencie.numlicencie WHERE je.id_equipe = pId_Equipe; END 
+CREATE PROCEDURE `getAllJoueursInEquipe`(IN `pId_Equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT licencie.numlicencie, prenomlicencie, nomlicencie, designation_Club, sexelicencie, c.libelle, id_ClubLicencie FROM club INNER JOIN licencie ON licencie.id_ClubLicencie = club.numAffiliation_Club INNER JOIN categorie as c on c.id = licencie.categorielicencie INNER JOIN joueursequipe as je on je.numLicencie = licencie.numlicencie WHERE je.id_equipe = pId_Equipe; END| 
 
-ALTER TABLE `concours` ADD `tour` INT NOT NULL DEFAULT '0' AFTER `sexe`, ADD `terminer` BOOLEAN NOT NULL DEFAULT FALSE AFTER `tour`;
+ALTER TABLE `concours` ADD `tour` INT NOT NULL DEFAULT '0' AFTER `sexe`, ADD `terminer` BOOLEAN NOT NULL DEFAULT FALSE AFTER `tour`|
 
-DROP PROCEDURE `getConcoursById`; CREATE DEFINER=`root`@`localhost` PROCEDURE `getConcoursById`(IN `id` INT) NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe,tour,terminer FROM concours inner join categorie as c on c.id = concours.categorie WHERE id_concours=id; END 
+DROP PROCEDURE `getConcoursById`; CREATE DEFINER=`root`@`localhost` PROCEDURE `getConcoursById`(IN `id` INT) NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe,tour,terminer FROM concours inner join categorie as c on c.id = concours.categorie WHERE id_concours=id; END| 
 
-DROP PROCEDURE `getConcours`; CREATE DEFINER=`root`@`localhost` PROCEDURE `getConcours`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe,tour,terminer FROM concours inner join categorie as c on c.id = concours.categorie; END 
+DROP PROCEDURE `getConcours`; CREATE DEFINER=`root`@`localhost` PROCEDURE `getConcours`() NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_concours,date_concours,nature,c.libelle,sexe,tour,terminer FROM concours inner join categorie as c on c.id = concours.categorie; END| 
 
-CREATE PROCEDURE `ajouterMatch`(IN ` pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (IdConcours, IdEquipe1, IdEquipe2, tour) VALUES (pIdConcours,pIdEquipe1,pIdEquipe1, pTour); END 
+CREATE PROCEDURE `ajouterMatch`(IN ` pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (IdConcours, IdEquipe1, IdEquipe2, tour) VALUES (pIdConcours,pIdEquipe1,pIdEquipe1, pTour); END| 
 
-DROP PROCEDURE `ajouterMatch`; CREATE DEFINER=`root`@`localhost` PROCEDURE `ajouterMatch`(IN ` pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (IdConcours, IdEquipe1, IdEquipe2, tour) VALUES (pIdConcours, pIdEquipe1, pIdEquipe2, pTour); END 
+DROP PROCEDURE `ajouterMatch`; CREATE DEFINER=`root`@`localhost` PROCEDURE `ajouterMatch`(IN ` pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (IdConcours, IdEquipe1, IdEquipe2, tour) VALUES (pIdConcours, pIdEquipe1, pIdEquipe2, pTour); END| 
 
-CREATE PROCEDURE `ajouterMatchBlanc`(IN `pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT, IN `pEquipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (IdConcours, IdEquipe1, IdEquipe2, tour, equipeGagnante, equipePerdante) VALUES (pIdConcours,pIdEquipe1,pIdEquipe1, pTour, pEquipe, pEquipe); END 
+CREATE PROCEDURE `ajouterMatchBlanc`(IN `pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT, IN `pEquipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO equipe (IdConcours, IdEquipe1, IdEquipe2, tour, equipeGagnante, equipePerdante) VALUES (pIdConcours,pIdEquipe1,pIdEquipe1, pTour, pEquipe, pEquipe); END| 
 
-DROP PROCEDURE `ajouterMatch`; CREATE DEFINER=`root`@`localhost` PROCEDURE `ajouterMatch`(IN `pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO matchconcours (IdConcours, IdEquipe1, IdEquipe2, tour) VALUES (pIdConcours, pIdEquipe1, pIdEquipe2, pTour); END 
+DROP PROCEDURE `ajouterMatch`; CREATE DEFINER=`root`@`localhost` PROCEDURE `ajouterMatch`(IN `pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO matchconcours (IdConcours, IdEquipe1, IdEquipe2, tour) VALUES (pIdConcours, pIdEquipe1, pIdEquipe2, pTour); END| 
 
-DROP PROCEDURE `ajouterMatchBlanc`; CREATE DEFINER=`root`@`localhost` PROCEDURE `ajouterMatchBlanc`(IN `pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT, IN `pEquipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO matchconcours (IdConcours, IdEquipe1, IdEquipe2, tour, equipeGagnante, equipePerdante) VALUES (pIdConcours,pIdEquipe1,pIdEquipe2, pTour, pEquipe, pEquipe); END 
+DROP PROCEDURE `ajouterMatchBlanc`; CREATE DEFINER=`root`@`localhost` PROCEDURE `ajouterMatchBlanc`(IN `pIdConcours` INT, IN `pIdEquipe1` INT, IN `pIdEquipe2` INT, IN `pTour` INT, IN `pEquipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN INSERT INTO matchconcours (IdConcours, IdEquipe1, IdEquipe2, tour, equipeGagnante, equipePerdante) VALUES (pIdConcours,pIdEquipe1,pIdEquipe2, pTour, pEquipe, pEquipe); END| 
+
+CREATE PROCEDURE `getEquipeByID`(IN `pid_equipe` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_equipe,nom,IdConcours FROM equipe WHERE id_equipe = pid_equipe; END| 
+
+CREATE PROCEDURE `getLastMatch`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT id_match FROM matchconcours WHERE IdConcours = pId_Concours ORDER BY id_match DESC LIMIT 1; END| 
+
+CREATE PROCEDURE `getAllMatchOfConcours`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT Id_match, IdConcours, IdEquipe1, IdEquipe2, equipeGagante, equipePerdante,tour FROM matchconcours WHERE IdConcours = pId_Concours; END| 
+
+
+DROP PROCEDURE `getAllMatchOfConcours`; CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllMatchOfConcours`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT Id_match, IdConcours, IdEquipe1, IdEquipe2, equipeGagnante, equipePerdante,tour FROM matchconcours WHERE IdConcours = pId_Concours; END| 
 

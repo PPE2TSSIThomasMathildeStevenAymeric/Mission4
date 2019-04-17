@@ -21,13 +21,15 @@ import javax.swing.JSeparator;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 public class FGestionConcours extends JFrame {
 	
-	private modeleMatch tableModeleMatch = new modeleMatch();
-	private JTable tableMatch = new JTable(tableModeleMatch);
+	private modeleMatch tableModeleMatch = null;
+	private JTable tableMatch = null;
 
 	/**
 	 * Launch the application.
@@ -49,8 +51,13 @@ public class FGestionConcours extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
 	 */
-	public FGestionConcours(Concours leConcours) {
+	public FGestionConcours(Concours leConcours) throws SQLException {
+		
+		tableModeleMatch = new modeleMatch(leConcours.getConcNum());
+		tableMatch = new JTable(tableModeleMatch);
+		
 		setTitle("Gestion du concours");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(500, 100, 868, 541);		
@@ -117,6 +124,7 @@ public class FGestionConcours extends JFrame {
 		getContentPane().add(separator_1);
 		
 		JButton btnCrationEquipe = new JButton("Cr\u00E9ation des \u00E9quipes");
+		btnCrationEquipe.setEnabled(false);
 		btnCrationEquipe.setBounds(81, 255, 167, 25);
 		getContentPane().add(btnCrationEquipe);
 		
@@ -127,6 +135,7 @@ public class FGestionConcours extends JFrame {
 		getContentPane().add(lblDbutDuTournoi);
 		
 		JButton btnDbuterLeTournoi = new JButton("D\u00E9buter le tournoi");
+		btnDbuterLeTournoi.setEnabled(false);
 		btnDbuterLeTournoi.setBounds(81, 302, 167, 25);
 		getContentPane().add(btnDbuterLeTournoi);
 		
@@ -148,6 +157,9 @@ public class FGestionConcours extends JFrame {
 		lblListeDesMatchs.setBounds(337, 50, 167, 16);
 		getContentPane().add(lblListeDesMatchs);
 		
+		
+		tableMatch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableMatch.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableMatch.setBounds(343, 91, 495, 280);
 		getContentPane().add(tableMatch);
 		
@@ -179,6 +191,12 @@ public class FGestionConcours extends JFrame {
 		lblTournoiTerminReponse.setBounds(139, 452, 109, 16);
 		getContentPane().add(lblTournoiTerminReponse);
 		
+		if (leConcours.getConcTourNum() == 0) {
+			btnCrationEquipe.setEnabled(true);
+			btnDbuterLeTournoi.setEnabled(true);
+			btnTourSuivant.setEnabled(false);
+		}
+		
 		btnCrationEquipe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FCreationEquipe frameCreationEquipe;
@@ -189,13 +207,18 @@ public class FGestionConcours extends JFrame {
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				};
 			}
 		});
 		
 		btnTourSuivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					leConcours.equipeEnListe();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -203,7 +226,11 @@ public class FGestionConcours extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					leConcours.increaseTourNum();
-					Match.randomizeRencontre(Equipe.getAllEquipeByConcoursID(leConcours.getConcNum()), leConcours);
+					ArrayList<Match> matchDepart = Match.randomizeRencontre(Equipe.getAllEquipeByConcoursID(leConcours.getConcNum()), leConcours);
+					
+					modeleMatch.addMatch(matchDepart);
+					
+					btnTourSuivant.setEnabled(true);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

@@ -141,8 +141,21 @@ public class Concours {
 		ConcTermine = concTermine;
 	}
 	
-	public ArrayList<Equipe> equipeEnListe() {
+	public ArrayList<Equipe> equipeEnListe() throws SQLException {
 		ArrayList<Equipe> lesEquipesTmp = new ArrayList<Equipe>();
+		
+		String requeteStocke = "CALL getAllEquipeGagnanteLastTour(" + this.ConcTourNum + ")";
+		ConnexionSQL bdd = new ConnexionSQL();
+		ResultSet resultbdd = bdd.requeteRetourneDonnees(requeteStocke);
+			
+		while(resultbdd.next()) {
+			
+			int id_Equipe = resultbdd.getInt(1);
+				
+			Equipe uneEquipe = Equipe.getEquipeByID(id_Equipe);
+			lesEquipesTmp.add(uneEquipe);   
+		}
+		
 		
 		return lesEquipesTmp;
 	}

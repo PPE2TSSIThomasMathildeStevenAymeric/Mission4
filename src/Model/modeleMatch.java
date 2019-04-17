@@ -1,22 +1,45 @@
 package Model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
 public class modeleMatch extends AbstractTableModel {
-	private final Match[] lesMatch;
+	private static Match[] lesMatch;
 
 	private final String[] entetes = { "ID_Match", "Id_Equipe1", "Nom_Equipe1", "Id_Equipe2", "Nom_Equipe2", "Gagnant", "Valider" };
 
-	public modeleMatch() {
+	public modeleMatch(int pNum) throws SQLException {
 		super();
-		 lesMatch = new Match[0];
+		 lesMatch = Match.getAllMatchOfConcours(pNum);
+		 System.out.println("coucou" + lesMatch.length);
+	}
+	
+	public static void addMatch(ArrayList<Match> plesMatchs) {
+		int sizeMatch = plesMatchs.size();
+		int sizeMatchBase = lesMatch.length;
+		
+		int newSize = sizeMatchBase + sizeMatch - 1;
+		
+		Match[] matchsTmp = new Match[newSize];
+		
+		for (int i = 0; i < sizeMatchBase - 1; i++) {
+			matchsTmp[i] = lesMatch[i];
+		}
+		int a = 0;
+		for (int x = sizeMatchBase; x < newSize - 1; x++) {
+			matchsTmp[x] = plesMatchs.get(a);
+			a++;
+		}
+		
+		
 	}
 
 	public int getRowCount() {
 		return lesMatch.length;
 	}
+	
 
 	public int getColumnCount() {
 		return entetes.length;

@@ -127,7 +127,13 @@ public class FPrincipale extends JFrame {
 				Concours leConcours = (Concours) comboBoxListConcours.getSelectedItem(); 
 				
 				if (leConcours != null) {
-					FGestionConcours frameGestionConcours =new FGestionConcours(leConcours);
+					FGestionConcours frameGestionConcours = null;
+					try {
+						frameGestionConcours = new FGestionConcours(leConcours);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					frameGestionConcours.setVisible(true);
 				}
 			}
