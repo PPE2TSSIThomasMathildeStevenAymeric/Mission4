@@ -1,9 +1,38 @@
 package Model;
 
+import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+
+class ButtonRenderer extends JButton implements TableCellRenderer {
+
+    public ButtonRenderer() {
+        setOpaque(true);
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        if (isSelected) {
+            setForeground(table.getSelectionForeground());
+            setBackground(table.getSelectionBackground());
+        } else {
+            setForeground(table.getForeground());
+            setBackground(UIManager.getColor("Button.background"));
+        }
+        setText((value == null) ? "" : value.toString());
+        return this;
+    }
+}
+
 
 public class modeleMatch extends AbstractTableModel {
 	private static Match[] lesMatch;
@@ -32,8 +61,7 @@ public class modeleMatch extends AbstractTableModel {
 			matchsTmp[x] = plesMatchs.get(a);
 			a++;
 		}
-		
-		
+			
 	}
 
 	public int getRowCount() {
@@ -62,9 +90,13 @@ public class modeleMatch extends AbstractTableModel {
 		case 4:
 			return lesMatch[rowIndex].getEquipe2().getNomEquipe();
 		case 5:
-			return null; // Combox
+			JComboBox comboBox = new JComboBox();
+			comboBox.addItem(lesMatch[rowIndex].getEquipe1().getNomEquipe());
+			comboBox.addItem(lesMatch[rowIndex].getEquipe2().getNomEquipe());
+
+			return new DefaultCellEditor(new JComboBox()); // Combox
 		case 6:
-			return null; // button valider
+			return new ButtonRenderer(); // button valider
 		default:
 			return lesMatch[rowIndex]; // Retourne un objet de type "Match"
 		}

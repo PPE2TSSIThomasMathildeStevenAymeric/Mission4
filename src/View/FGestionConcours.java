@@ -5,7 +5,11 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 import Model.Concours;
 import Model.Equipe;
@@ -18,7 +22,10 @@ import java.awt.GridLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -161,7 +168,11 @@ public class FGestionConcours extends JFrame {
 		tableMatch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableMatch.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableMatch.setBounds(343, 91, 495, 280);
-		getContentPane().add(tableMatch);
+			
+		JScrollPane scrollPane = new JScrollPane(tableMatch);
+		scrollPane.setBounds(343, 71, 503, 338);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
 		
 		JLabel lblTourN = new JLabel("Tour n\u00B0");
 		lblTourN.setBounds(12, 377, 56, 16);
@@ -172,7 +183,7 @@ public class FGestionConcours extends JFrame {
 		getContentPane().add(lblNumTour);
 		
 		JButton btnTourSuivant = new JButton("Tour suivant");
-		btnTourSuivant.setBounds(509, 404, 158, 25);
+		btnTourSuivant.setBounds(509, 422, 158, 25);
 		getContentPane().add(btnTourSuivant);
 		
 		JLabel lblEquipeGagnante = new JLabel("Equipe gagnante :");
