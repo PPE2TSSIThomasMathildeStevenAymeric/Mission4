@@ -109,8 +109,10 @@ public class FPrincipale extends JFrame {
 				String pNature = resultbdd.getString(3);
 				String pCategorie = resultbdd.getString(4);
 				String pSexe = resultbdd.getString(5);
+				int pTourNum = resultbdd.getInt(6);
+				int pTerminer = resultbdd.getInt(7);
 				
-				Concours leConcours = new Concours(id_concours, "", pDate, pNature, pCategorie, pSexe);
+				Concours leConcours = new Concours(id_concours, "", pDate, pNature, pCategorie, pSexe, pTourNum, pTerminer);
 				
 				comboBoxListConcours.addItem(leConcours);
 				

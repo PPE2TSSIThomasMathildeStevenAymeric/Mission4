@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Model.Concours;
+import Model.Equipe;
+import Model.Match;
 import Model.modeleJoueur;
 import Model.modeleMatch;
 
@@ -49,6 +51,7 @@ public class FGestionConcours extends JFrame {
 	 * Create the frame.
 	 */
 	public FGestionConcours(Concours leConcours) {
+		setTitle("Gestion du concours");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(500, 100, 868, 541);		
 		getContentPane().setLayout(null);
@@ -152,7 +155,7 @@ public class FGestionConcours extends JFrame {
 		lblTourN.setBounds(12, 377, 56, 16);
 		getContentPane().add(lblTourN);
 		
-		JLabel lblNumTour = new JLabel("1");
+		JLabel lblNumTour = new JLabel(String.valueOf(leConcours.getConcTourNum()));
 		lblNumTour.setBounds(59, 377, 56, 16);
 		getContentPane().add(lblNumTour);
 		
@@ -164,16 +167,16 @@ public class FGestionConcours extends JFrame {
 		lblEquipeGagnante.setBounds(12, 423, 120, 16);
 		getContentPane().add(lblEquipeGagnante);
 		
-		JLabel lblEquipeGagnanteReponse = new JLabel("Tournoi en cours");
-		lblEquipeGagnanteReponse.setBounds(129, 423, 109, 16);
+		JLabel lblEquipeGagnanteReponse = new JLabel("Concours en cours");
+		lblEquipeGagnanteReponse.setBounds(139, 423, 109, 16);
 		getContentPane().add(lblEquipeGagnanteReponse);
 		
-		JLabel lblTournoiTermin = new JLabel("Tournoi termin\u00E9 :");
-		lblTournoiTermin.setBounds(12, 452, 103, 16);
+		JLabel lblTournoiTermin = new JLabel("Concours termin\u00E9 :");
+		lblTournoiTermin.setBounds(12, 452, 120, 16);
 		getContentPane().add(lblTournoiTermin);
 		
 		JLabel lblTournoiTerminReponse = new JLabel("Faux");
-		lblTournoiTerminReponse.setBounds(129, 452, 109, 16);
+		lblTournoiTerminReponse.setBounds(139, 452, 109, 16);
 		getContentPane().add(lblTournoiTerminReponse);
 		
 		btnCrationEquipe.addActionListener(new ActionListener() {
@@ -183,6 +186,24 @@ public class FGestionConcours extends JFrame {
 				try {
 					frameCreationEquipe = new FCreationEquipe(leConcours);
 					frameCreationEquipe.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		btnTourSuivant.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		btnDbuterLeTournoi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					leConcours.increaseTourNum();
+					Match.randomizeRencontre(Equipe.getAllEquipeByConcoursID(leConcours.getConcNum()), leConcours);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

@@ -127,7 +127,7 @@ public class Equipe {
 			lesEquipesTmp.add(uneEquipe);
 		}
 		bdd.fermerConnexion();
-		
+	
 		return lesEquipesTmp;
 	}
 	

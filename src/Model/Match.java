@@ -1,5 +1,6 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -10,12 +11,27 @@ public class Match {
 	protected Equipe equipe1;
 	protected Equipe equipe2;
 	protected Equipe equipegagnante;
+	protected Equipe equipePerdante;
+	protected int ConcoursTourNum;
 	
-	public Match(int idConcours, Equipe equipe1, Equipe equipe2) {
+	
+	
+	public Match(int idConcours, Equipe equipe1, Equipe equipe2, int pConcoursTourNum) {
 		super();
 		this.idConcours = idConcours;
 		this.equipe1 = equipe1;
 		this.equipe2 = equipe2;
+		this.ConcoursTourNum = pConcoursTourNum;
+	}
+	
+	public Match(int idConcours, Equipe equipe1, Equipe equipe2, int pConcoursTourNum, Equipe pEquipe) {
+		super();
+		this.idConcours = idConcours;
+		this.equipe1 = equipe1;
+		this.equipe2 = equipe2;
+		this.ConcoursTourNum = pConcoursTourNum;
+		this.equipegagnante = pEquipe;
+		this.equipePerdante = pEquipe;
 	}
 	
 	public int getIdConcours() {
@@ -49,11 +65,25 @@ public class Match {
 		this.equipegagnante = equipegagnante;
 	}
 	
-	public static ArrayList<Match> randomizeRencontre(ArrayList<Equipe> listeEquipe, int idConcours) {
-		ArrayList<Match> listeMatch = null;
+	public void addToDB() throws SQLException {
+		String requeteStocke = "CALL ajouterMatch(" + this.idConcours + "," + this.equipe1.getIdEquipe() + "," + this.equipe2.getIdEquipe() + "," + this.ConcoursTourNum + ")";
+		ConnexionSQL bdd = new ConnexionSQL();
+		bdd.requeteSansDonnes(requeteStocke);
+	}
+	
+	public void addToDBBlanc() throws SQLException {
+		String requeteStocke = "CALL ajouterMatchBlanc(" + this.idConcours + "," + this.equipe1.getIdEquipe() + "," + this.equipe2.getIdEquipe() + "," + this.ConcoursTourNum  + "," + this.equipe1.getIdEquipe() + ")";
+		ConnexionSQL bdd = new ConnexionSQL();
+		bdd.requeteSansDonnes(requeteStocke);
+		
+	}
+	
+	public static ArrayList<Match> randomizeRencontre(ArrayList<Equipe> listeEquipe, Concours leConcours) throws SQLException {
+		ArrayList<Match> listeMatchRandom = new ArrayList<Match>();
 		ArrayList<Equipe> listeEquipeRestante = listeEquipe;
 		
-		while (listeEquipeRestante.size() < 2) {
+		
+		while (listeEquipeRestante.size() >= 2) {
 			int nbequipe = listeEquipeRestante.size();
 			
 			Equipe equipe1 = null;
@@ -67,18 +97,43 @@ public class Match {
 			listeEquipeRestante.remove(equipe1);
 			listeEquipeRestante.remove(equipe2);
 			
-			Match unMatch = new Match(idConcours, equipe1, equipe2);
-			listeMatch.add(unMatch);
+			System.out.println("match : " + equipe1.getNomEquipe() + " - " + equipe2.getNomEquipe());
+			
+			Match unMatch = new Match(leConcours.getConcNum(), equipe1, equipe2, leConcours.getConcTourNum());
+			
+			listeMatchRandom.add(unMatch);
+			unMatch.addToDB();
 			// Créer un match avec comme paramètre l'id du concours, l'id equipe1 et l'id equipe2
 		}
 		
 		if (listeEquipeRestante.size() == 1) {
 			// Faire gagner l'équipe = match blanc
 			// créer un match mais mettre directement gg l'équipe
+			Equipe equipeRestante = listeEquipeRestante.get(0);
+			Match unMatch = new Match(leConcours.getConcNum(), equipeRestante, equipeRestante, leConcours.getConcTourNum(), equipeRestante);
+			listeMatchRandom.add(unMatch);
+			unMatch.addToDBBlanc();
 		}
 		
-		return listeMatch;
+		return listeMatchRandom;
 		
+	}
+
+
+	public Equipe getEquipePerdante() {
+		return equipePerdante;
+	}
+
+	public void setEquipePerdante(Equipe equipePerdante) {
+		this.equipePerdante = equipePerdante;
+	}
+
+	public int getConcoursTourNum() {
+		return ConcoursTourNum;
+	}
+
+	public void setConcoursTourNum(int concoursTourNum) {
+		ConcoursTourNum = concoursTourNum;
 	}
 
 }

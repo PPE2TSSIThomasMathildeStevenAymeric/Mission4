@@ -181,7 +181,7 @@ public class FCreationEquipe extends JFrame {
 	public FCreationEquipe(Concours leConcours) throws SQLException {
 		setTitle("Gestion des \u00E9quipes du concours");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1037, 525);
+		setBounds(100, 100, 1037, 534);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -267,6 +267,15 @@ public class FCreationEquipe extends JFrame {
 		JButton btnRetirerLquipe = new JButton("Retirer l'\u00E9quipe");
 		btnRetirerLquipe.setBounds(36, 433, 119, 25);
 		contentPane.add(btnRetirerLquipe);
+		
+		JButton btnFermerLaFenetre = new JButton("Fermer la fenetre ");
+		btnFermerLaFenetre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnFermerLaFenetre.setBounds(795, 458, 212, 25);
+		contentPane.add(btnFermerLaFenetre);
 		
 		for(Equipe loadEquipe : Equipe.getAllEquipeByConcoursID(leConcours.getConcNum())) {
 			modeleEquipe.addElement(loadEquipe);

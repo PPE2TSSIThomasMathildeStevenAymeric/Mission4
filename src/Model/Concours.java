@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,8 @@ public class Concours {
 	protected String ConcNature;
 	protected String ConcCat;
 	protected String ConcSexe;
+	protected int ConcTourNum;
+	protected int ConcTermine;
 
 	public Concours() {
 
@@ -25,6 +28,19 @@ public class Concours {
 		this.ConcCat = concCat;
 		this.ConcSexe = concSexe;
 		this.ConcNum = pID;
+		
+	}
+	
+	public Concours(int pID, String ConcNom, Date concDate, String concNature, String concCat, String concSexe, int concTourNum, int ConcTermineBool) {
+
+		this.ConcNom = ConcNom;
+		this.ConcDate = concDate;
+		this.ConcNature = concNature;
+		this.ConcCat = concCat;
+		this.ConcSexe = concSexe;
+		this.ConcNum = pID;
+		this.ConcTourNum = concTourNum;
+		this.ConcTermine = ConcTermineBool;
 		
 	}
 	
@@ -44,8 +60,10 @@ public class Concours {
 		String pNature = result.getString(3);
 		String pCategorie = result.getString(4);
 		String pSexe = result.getString(5);
+		int pTourNum = result.getInt(6);
+		int pTerminer = result.getInt(7);
 		
-		unConcours = new Concours(pID_database, "test", pDate, pNature, pCategorie, pSexe);
+		unConcours = new Concours(pID_database, "test", pDate, pNature, pCategorie, pSexe, pTourNum, pTerminer);
 		
 		bdd.fermerConnexion();
 		
@@ -99,6 +117,7 @@ public class Concours {
 	public void setConcSexe(String concSexe) {
 		this.ConcSexe = concSexe;
 	}
+	
 
 	@Override
 	public String toString() {
@@ -106,4 +125,31 @@ public class Concours {
 				+ ConcSexe + "]";
 	}
 
+	public int getConcTourNum() {
+		return ConcTourNum;
+	}
+
+	public void setConcTourNum(int concTourNum) {
+		ConcTourNum = concTourNum;
+	}
+
+	public int isConcTermine() {
+		return ConcTermine;
+	}
+
+	public void setConcTermine(int concTermine) {
+		ConcTermine = concTermine;
+	}
+	
+	public ArrayList<Equipe> equipeEnListe() {
+		ArrayList<Equipe> lesEquipesTmp = new ArrayList<Equipe>();
+		
+		return lesEquipesTmp;
+	}
+
+	public void increaseTourNum() {
+		this.ConcTourNum = this.ConcTourNum + 1;
+		
+	}
+	
 }
