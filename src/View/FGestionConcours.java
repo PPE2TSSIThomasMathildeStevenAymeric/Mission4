@@ -293,6 +293,11 @@ private class affichageMatch extends DefaultListCellRenderer {
 						
 						ArrayList<Equipe> lesEquipes = leConcours.equipeEnListe();
 						
+						if (lesEquipes.size() == 2) {
+							dernierTour = true;
+							lblDernierTourReponse.setText("Vrai");
+						}
+						
 						ArrayList<Match> matchDepart = Match.randomizeRencontre(lesEquipes, leConcours);
 						
 						System.out.println(matchDepart.size());
@@ -301,10 +306,7 @@ private class affichageMatch extends DefaultListCellRenderer {
 							modeleMatch.addElement(unMatch);
 						}
 						
-						if (lesEquipes.size() == 2) {
-							dernierTour = true;
-							lblDernierTourReponse.setText("Vrai");
-						}
+						
 						
 					}
 				} catch (SQLException e1) {
