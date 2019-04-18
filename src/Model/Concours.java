@@ -144,7 +144,7 @@ public class Concours {
 		ConnexionSQL bdd = new ConnexionSQL();
 		bdd.requeteSansDonnes(requeteStocke);
 		
-		bdd.fermerConnexion();
+		//bdd.fermerConnexion();
 	}
 	
 	public ArrayList<Equipe> equipeEnListe() throws SQLException {
@@ -174,7 +174,7 @@ public class Concours {
 		ConnexionSQL bdd = new ConnexionSQL();
 		bdd.requeteSansDonnes(requeteStocke);
 		
-		bdd.fermerConnexion();
+		//bdd.fermerConnexion();
 	}
 	
 	public Equipe findEquipeGagnante() throws SQLException {

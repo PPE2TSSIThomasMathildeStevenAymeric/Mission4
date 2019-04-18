@@ -100,8 +100,8 @@ public class FConcours extends JFrame {
 		JComboBox combo_box_categorie = new JComboBox();
 		combo_box_categorie.setBounds(183, 249, 115, 22);
 		contentPane.add(combo_box_categorie);
-		combo_box_categorie.addItem("Adulte");
 		combo_box_categorie.addItem("Enfant");
+		combo_box_categorie.addItem("Adulte");
 		combo_box_categorie.addItem("Senior");
 		
 		JLabel lblCatgorie = new JLabel("Cat\u00E9gorie :");
@@ -140,7 +140,7 @@ public class FConcours extends JFrame {
 				
 				String nom=txtNom.getText();
 				String pnature = combo_box_nature.getSelectedItem().toString();	
-				String categorie=combo_box_categorie.getSelectedItem().toString();
+				int categorie=combo_box_categorie.getSelectedIndex() + 1;
 				String sexe=combo_box_sexe.getSelectedItem().toString();
 				
 				try {
@@ -150,7 +150,7 @@ public class FConcours extends JFrame {
 					//	String requete = "INSERT INTO Concours (date_concours, Categorie, nature, sexe) VALUES ('" + dateDB + "','"
 					//		+ categorie + "','" + pnature + "','" + sexe + "')";
 					
-					String requeteStocke = "CALL ajouterConcours('" + dateDB + "','" + categorie + "','" + pnature + "','" + sexe + ")";
+					String requeteStocke = "CALL ajouterConcours('" + dateDB + "','" + categorie + "','" + pnature + "','" + sexe + "')";
 					ConnexionSQL bdd = new ConnexionSQL();
 
 					bdd.requeteSansDonnes(requeteStocke);
@@ -163,7 +163,7 @@ public class FConcours extends JFrame {
 					
 					int ID = pId.getInt(1);
 					bdd.fermerConnexion();
-					Concours concours = new Concours(ID, nom,dateDB, pnature, categorie, sexe);
+					Concours concours = new Concours(ID, nom,dateDB, pnature, String.valueOf(categorie), sexe);
 					FGestionConcours frameGestionConcours=new FGestionConcours(concours);
 					frameGestionConcours.setVisible(true);
 					

@@ -35,26 +35,26 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 
 
 public class modeleMatch extends AbstractTableModel {
-	private static Match[] lesMatch;
+	private static ArrayList<Match> lesMatch;
 
 	private final String[] entetes = { "ID_Match", "Id_Equipe1", "Nom_Equipe1", "Id_Equipe2", "Nom_Equipe2", "Gagnant", "Valider" };
 
 	public modeleMatch(int pNum) throws SQLException {
 		super();
 		 lesMatch = Match.getAllMatchOfConcours(pNum);
-		 System.out.println("coucou" + lesMatch.length);
+		 System.out.println("coucou" + lesMatch.size());
 	}
 	
 	public static void addMatch(ArrayList<Match> plesMatchs) {
 		int sizeMatch = plesMatchs.size();
-		int sizeMatchBase = lesMatch.length;
+		int sizeMatchBase = lesMatch.size();
 		
 		int newSize = sizeMatchBase + sizeMatch - 1;
 		
 		Match[] matchsTmp = new Match[newSize];
 		
 		for (int i = 0; i < sizeMatchBase - 1; i++) {
-			matchsTmp[i] = lesMatch[i];
+			matchsTmp[i] = lesMatch.get(i);
 		}
 		int a = 0;
 		for (int x = sizeMatchBase; x < newSize - 1; x++) {
@@ -65,7 +65,7 @@ public class modeleMatch extends AbstractTableModel {
 	}
 
 	public int getRowCount() {
-		return lesMatch.length;
+		return lesMatch.size();
 	}
 	
 
@@ -80,25 +80,25 @@ public class modeleMatch extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return lesMatch[rowIndex].getIdMatch();
+			return lesMatch.get(rowIndex).getIdMatch();
 		case 1:
-			return lesMatch[rowIndex].getEquipe1().getIdEquipe();
+			return lesMatch.get(rowIndex).getEquipe1().getIdEquipe();
 		case 2:
-			return lesMatch[rowIndex].getEquipe1().getNomEquipe();
+			return lesMatch.get(rowIndex).getEquipe1().getNomEquipe();
 		case 3:
-			return lesMatch[rowIndex].getEquipe2().getIdEquipe();
+			return lesMatch.get(rowIndex).getEquipe2().getIdEquipe();
 		case 4:
-			return lesMatch[rowIndex].getEquipe2().getNomEquipe();
+			return lesMatch.get(rowIndex).getEquipe2().getNomEquipe();
 		case 5:
 			JComboBox comboBox = new JComboBox();
-			comboBox.addItem(lesMatch[rowIndex].getEquipe1().getNomEquipe());
-			comboBox.addItem(lesMatch[rowIndex].getEquipe2().getNomEquipe());
+			comboBox.addItem(lesMatch.get(rowIndex).getEquipe1().getNomEquipe());
+			comboBox.addItem(lesMatch.get(rowIndex).getEquipe2().getNomEquipe());
 
 			return new DefaultCellEditor(new JComboBox()); // Combox
 		case 6:
 			return new ButtonRenderer(); // button valider
 		default:
-			return lesMatch[rowIndex]; // Retourne un objet de type "Match"
+			return lesMatch.get(rowIndex); // Retourne un objet de type "Match"
 		}
 	}
 }
