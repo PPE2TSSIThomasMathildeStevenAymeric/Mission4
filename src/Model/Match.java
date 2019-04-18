@@ -88,6 +88,8 @@ public class Match {
 		int id_Match = tmp.getInt(1);
 		
 		this.setIdMatch(id_Match);
+		
+		bdd.fermerConnexion();
 	}
 	
 	public void addToDBBlanc() throws SQLException {
@@ -101,6 +103,8 @@ public class Match {
 		int id_Match = tmp.getInt(1);
 		
 		this.setIdMatch(id_Match);
+		
+		bdd.fermerConnexion();
 		
 	}
 	
@@ -205,7 +209,9 @@ public class Match {
 			
 			
 		}
-
+		
+		bdd.fermerConnexion();
+		
 		return lesMatchtmp;
 		
 	}

@@ -31,6 +31,8 @@ public class FGestionConcours extends JFrame {
 	
 	public static DefaultListModel<Match> modeleMatch = new DefaultListModel();
 	private JList listMatch = new JList(modeleMatch);
+	private boolean dernierTour = false;
+	private boolean Concoursterminer = false;
 
 	/**
 	 * Launch the application.
@@ -87,6 +89,7 @@ private class affichageMatch extends DefaultListCellRenderer {
 	 */
 	public FGestionConcours(Concours leConcours) throws SQLException {
 		
+		modeleMatch.clear();
 		
 		setTitle("Gestion du concours");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -200,22 +203,36 @@ private class affichageMatch extends DefaultListCellRenderer {
 		
 		JButton btnTourSuivant = new JButton("Tour suivant");
 		btnTourSuivant.setEnabled(false);
-		btnTourSuivant.setBounds(667, 430, 158, 25);
+		btnTourSuivant.setBounds(556, 419, 120, 25);
 		getContentPane().add(btnTourSuivant);
 		
 		JLabel lblEquipeGagnante = new JLabel("Equipe gagnante :");
-		lblEquipeGagnante.setBounds(12, 423, 120, 16);
+		lblEquipeGagnante.setBounds(12, 406, 120, 16);
 		getContentPane().add(lblEquipeGagnante);
 		
-		JLabel lblEquipeGagnanteReponse = new JLabel("Concours en cours");
-		lblEquipeGagnanteReponse.setBounds(139, 423, 109, 16);
+		
+		String lblEquipeGagnanteReponseTxt = "Concours en cours";
+		if (leConcours.isConcTermine() == 1) {
+			lblEquipeGagnanteReponseTxt = leConcours.findEquipeGagnante().getNomEquipe();
+		}
+		
+		JLabel lblEquipeGagnanteReponse = new JLabel(lblEquipeGagnanteReponseTxt);
+		lblEquipeGagnanteReponse.setBounds(139, 406, 109, 16);
 		getContentPane().add(lblEquipeGagnanteReponse);
 		
 		JLabel lblTournoiTermin = new JLabel("Concours termin\u00E9 :");
 		lblTournoiTermin.setBounds(12, 452, 120, 16);
 		getContentPane().add(lblTournoiTermin);
 		
-		JLabel lblTournoiTerminReponse = new JLabel("Faux");
+		String lblTournoiTerminReponseTxt = "";
+		
+		if(leConcours.isConcTermine() == 0) {
+			lblTournoiTerminReponseTxt = "Faux";
+		} else {
+			lblTournoiTerminReponseTxt = "Vrai";
+		}
+		
+		JLabel lblTournoiTerminReponse = new JLabel(lblTournoiTerminReponseTxt);
 		lblTournoiTerminReponse.setBounds(139, 452, 109, 16);
 		getContentPane().add(lblTournoiTerminReponse);
 		
@@ -230,14 +247,28 @@ private class affichageMatch extends DefaultListCellRenderer {
 		
 		JButton btnDfinirGagnant = new JButton("D\u00E9finir gagnant du match");
 		btnDfinirGagnant.setEnabled(false);
-		btnDfinirGagnant.setBounds(387, 408, 200, 47);
+		btnDfinirGagnant.setBounds(344, 412, 200, 47);
 		getContentPane().add(btnDfinirGagnant);
+		
+		JButton btnFinConcours = new JButton("Fin concours");
+		btnFinConcours.setEnabled(false);
+		btnFinConcours.setBounds(697, 419, 118, 25);
+		getContentPane().add(btnFinConcours);
+		
+		JLabel lblDernierTour = new JLabel("Dernier tour :");
+		lblDernierTour.setBounds(12, 428, 103, 16);
+		getContentPane().add(lblDernierTour);
+		
+		JLabel lblDernierTourReponse = new JLabel("Faux");
+		lblDernierTourReponse.setBounds(139, 428, 56, 16);
+		getContentPane().add(lblDernierTourReponse);
 		
 		if (leConcours.getConcTourNum() == 0) {
 			btnCrationEquipe.setEnabled(true);
 			btnDbuterLeTournoi.setEnabled(true);
 			btnTourSuivant.setEnabled(false);
 		}
+		
 		
 		btnCrationEquipe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -256,22 +287,31 @@ private class affichageMatch extends DefaultListCellRenderer {
 		btnTourSuivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
-					leConcours.increaseTourNum();
-					
-					
-					ArrayList<Match> matchDepart = Match.randomizeRencontre(leConcours.equipeEnListe(), leConcours);
-					
-					System.out.println(matchDepart.size());
-					
-					for (Match unMatch : matchDepart){
-						modeleMatch.addElement(unMatch);
+					if (leConcours.isConcTermine() == 0) {
+						leConcours.increaseTourNum();
+						lblNumTour.setText(String.valueOf(leConcours.getConcTourNum()));
+						
+						ArrayList<Equipe> lesEquipes = leConcours.equipeEnListe();
+						
+						ArrayList<Match> matchDepart = Match.randomizeRencontre(lesEquipes, leConcours);
+						
+						System.out.println(matchDepart.size());
+						
+						for (Match unMatch : matchDepart){
+							modeleMatch.addElement(unMatch);
+						}
+						
+						if (lesEquipes.size() == 2) {
+							dernierTour = true;
+							lblDernierTourReponse.setText("Vrai");
+						}
+						
 					}
-					
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 				}
+				
 			}
 		});
 		
@@ -279,14 +319,13 @@ private class affichageMatch extends DefaultListCellRenderer {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					leConcours.increaseTourNum();
+					lblNumTour.setText(String.valueOf(leConcours.getConcTourNum()));
 					ArrayList<Match> matchDepart = Match.randomizeRencontre(Equipe.getAllEquipeByConcoursID(leConcours.getConcNum()), leConcours);
 					
 					for (Match unMatch : matchDepart){
 						modeleMatch.addElement(unMatch);
 					}
 					
-					
-					btnTourSuivant.setEnabled(true);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -299,9 +338,16 @@ private class affichageMatch extends DefaultListCellRenderer {
 	            public void valueChanged(ListSelectionEvent arg0) {
 	                	Match pMatch = (Match) listMatch.getSelectedValue();
 	                	
+	                	if (pMatch != null) {
+	                	
 	                	if (pMatch.getEquipe1().getIdEquipe() == pMatch.getEquipe2().getIdEquipe()) {
 	                		btnDfinirGagnant.setEnabled(false);
+	                	} else if (pMatch.getConcoursTourNum() != leConcours.getConcTourNum()) {
+	                		btnDfinirGagnant.setEnabled(false);
+	                	} else if (leConcours.isConcTermine() == 1) {
+	                		btnDfinirGagnant.setEnabled(false);
 	                	} else {
+	                	
 	                		btnDfinirGagnant.setEnabled(true);
 	                	}
 	                	
@@ -312,11 +358,24 @@ private class affichageMatch extends DefaultListCellRenderer {
 	                		Match unMatch = (Match) modeleMatch.get(a);
 	                		if (unMatch.getEquipegagnante() == null) {
 	                			tourSuivant = false;
-	                		}
+	                		} else
+								try {
+									if (leConcours.verifcationIsDernierTour() == true){
+										tourSuivant = false;
+										if (leConcours.isConcTermine() == 0) {
+											btnFinConcours.setEnabled(true);
+										}
+									}
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 	                	}
 	                	
 	                	btnTourSuivant.setEnabled(tourSuivant);
 	                	
+	                	
+	            }
 	                	
 	            }
 
@@ -348,12 +407,34 @@ private class affichageMatch extends DefaultListCellRenderer {
 				
 				Match pMatch = (Match) listMatch.getSelectedValue();
 				
-				FSelectionGagnantMatch frameGestionGagnant = null;
-				frameGestionGagnant = new FSelectionGagnantMatch(pMatch);
-				frameGestionGagnant.setVisible(true);
+				if (pMatch.getConcoursTourNum() == leConcours.getConcTourNum() && leConcours.isConcTermine() == 0) {
+				
+					FSelectionGagnantMatch frameGestionGagnant = null;
+					frameGestionGagnant = new FSelectionGagnantMatch(pMatch);
+					frameGestionGagnant.setVisible(true);
+				}
+				
+			}
+		});
+		
+		btnFinConcours.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblTournoiTerminReponse.setText("Terminé");
+				Concoursterminer = true;
+				
+				try {
+					leConcours.setConcTermine(1);
+					Equipe equipeGagnante = leConcours.findEquipeGagnante();
+					lblEquipeGagnanteReponse.setText(equipeGagnante.getNomEquipe());
+					btnFinConcours.setEnabled(false);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 			}
 		});
 		
 	}
+	
 }

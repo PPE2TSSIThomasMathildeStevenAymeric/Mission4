@@ -137,8 +137,14 @@ public class Concours {
 		return ConcTermine;
 	}
 
-	public void setConcTermine(int concTermine) {
+	public void setConcTermine(int concTermine) throws SQLException {
 		ConcTermine = concTermine;
+		
+		String requeteStocke = "CALL updateConcoursTermine(" + this.ConcNum + "," + concTermine + ")";
+		ConnexionSQL bdd = new ConnexionSQL();
+		bdd.requeteSansDonnes(requeteStocke);
+		
+		bdd.fermerConnexion();
 	}
 	
 	public ArrayList<Equipe> equipeEnListe() throws SQLException {
@@ -156,6 +162,7 @@ public class Concours {
 			lesEquipesTmp.add(uneEquipe);   
 		}
 		
+		bdd.fermerConnexion();
 		
 		return lesEquipesTmp;
 	}
@@ -166,6 +173,42 @@ public class Concours {
 		String requeteStocke = "CALL updateTourConcours(" + this.ConcNum + "," + this.ConcTourNum + ")";
 		ConnexionSQL bdd = new ConnexionSQL();
 		bdd.requeteSansDonnes(requeteStocke);
+		
+		bdd.fermerConnexion();
+	}
+	
+	public Equipe findEquipeGagnante() throws SQLException {
+		Equipe equipeGagnante = null;
+		
+		ConnexionSQL bdd = new ConnexionSQL();
+		String requeteStocke2 = "CALL getEquipeGagnanteConcours(" + this.ConcNum + "," + this.ConcTourNum + ")";
+		ResultSet tmp = bdd.requeteRetourneDonnees(requeteStocke2);
+		tmp.next();
+		int id_Equipe = tmp.getInt(1);
+		
+		equipeGagnante = Equipe.getEquipeByID(id_Equipe);
+		
+		bdd.fermerConnexion();
+		
+		return equipeGagnante;
+	}
+	
+	public boolean verifcationIsDernierTour() throws SQLException {
+		// Si = 1, dernier tour
+		boolean reponse = false;
+		
+		ConnexionSQL bdd = new ConnexionSQL();
+		String requeteStocke2 = "CALL getNbMatchDernierTour (" + this.ConcNum + "," + this.ConcTourNum + ")";
+		ResultSet tmp = bdd.requeteRetourneDonnees(requeteStocke2);
+		tmp.next();
+		int count = tmp.getInt(1);
+		
+		if (count == 1) {
+			reponse = true;
+		}
+		bdd.fermerConnexion();
+		return reponse;
+		
 	}
 	
 }

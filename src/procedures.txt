@@ -45,3 +45,10 @@ CREATE PROCEDURE `getAllEquipeGagnanteLastTour`(IN `pTourNum` INT, IN `pConcours
 
 CREATE PROCEDURE `updateTourConcours`(IN `pConcourNum` INT, IN `pConcoursTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN UPDATE `concours` SET `tour` = pConcoursTour WHERE `concours`.`id_concours` = pConcourNum; END|
 
+CREATE PROCEDURE `getEquipeGagnanteConcours`(IN `pConcoursNum` INT, IN `pConcoursTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT equipeGagnante FROM matchconcours WHERE IdConcours = pConcoursNum AND tour = pConcoursTour; END|
+
+CREATE PROCEDURE `getNbMatchDernierTour`(IN `pConcoursNum` INT, IN `pConcoursTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT COUNT(*) FROM matchconcours WHERE IdConcours = pConcoursNum AND tour = pConcoursTour; END|
+
+CREATE PROCEDURE `updateConcoursTermine`(IN `pConcoursNum` INT, IN `pConcoursTerminer` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN UPDATE `concours` SET `terminer` = pConcoursTerminer WHERE `concours`.`id_concours` = pConcoursNum; END|
+
+
