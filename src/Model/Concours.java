@@ -144,7 +144,7 @@ public class Concours {
 	public ArrayList<Equipe> equipeEnListe() throws SQLException {
 		ArrayList<Equipe> lesEquipesTmp = new ArrayList<Equipe>();
 		
-		String requeteStocke = "CALL getAllEquipeGagnanteLastTour(" + this.ConcTourNum + ")";
+		String requeteStocke = "CALL getAllEquipeGagnanteLastTour(" + (this.ConcTourNum - 1) + "," + this.getConcNum() + ")";
 		ConnexionSQL bdd = new ConnexionSQL();
 		ResultSet resultbdd = bdd.requeteRetourneDonnees(requeteStocke);
 			
@@ -160,9 +160,12 @@ public class Concours {
 		return lesEquipesTmp;
 	}
 
-	public void increaseTourNum() {
+	public void increaseTourNum() throws SQLException {
 		this.ConcTourNum = this.ConcTourNum + 1;
 		
+		String requeteStocke = "CALL updateTourConcours(" + this.ConcNum + "," + this.ConcTourNum + ")";
+		ConnexionSQL bdd = new ConnexionSQL();
+		bdd.requeteSansDonnes(requeteStocke);
 	}
 	
 }

@@ -39,3 +39,9 @@ CREATE PROCEDURE `getAllMatchOfConcours`(IN `pId_Concours` INT) NOT DETERMINISTI
 
 DROP PROCEDURE `getAllMatchOfConcours`; CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllMatchOfConcours`(IN `pId_Concours` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT Id_match, IdConcours, IdEquipe1, IdEquipe2, equipeGagnante, equipePerdante,tour FROM matchconcours WHERE IdConcours = pId_Concours; END| 
 
+CREATE PROCEDURE `setEquipeGagnanteMatch`(IN `pIdMatch` INT, IN `pEquipeGagnante` INT, IN `pEquipePerdante` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN UPDATE `matchconcours` SET `equipeGagnante` = pEquipeGagnante, `equipePerdante` = pEquipePerdante WHERE `matchconcours`.`id_match` = pIdMatch; END|
+
+CREATE PROCEDURE `getAllEquipeGagnanteLastTour`(IN `pTourNum` INT, IN `pConcoursNum` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN SELECT equipeGagnante FROM matchconcours WHERE tour = pTourNum AND IdConcours = pConcoursNum; END|
+
+CREATE PROCEDURE `updateTourConcours`(IN `pConcourNum` INT, IN `pConcoursTour` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN UPDATE `concours` SET `tour` = pConcoursTour WHERE `concours`.`id_concours` = pConcourNum; END|
+

@@ -167,6 +167,11 @@ public class Equipe {
 	
 		return uneEquipe;
 	}
+
+	@Override
+	public String toString() {
+		return "Equipe [idEquipe=" + idEquipe + ", nomEquipe=" + nomEquipe + "]";
+	}
 	
 	
 }

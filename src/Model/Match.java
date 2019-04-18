@@ -162,7 +162,7 @@ public class Match {
 		ConcoursTourNum = concoursTourNum;
 	}
 	
-	public static Match[] getAllMatchOfConcours(int pNum) throws SQLException {
+	public static ArrayList<Match> getAllMatchOfConcours(int pNum) throws SQLException {
 		
 		ArrayList<Match> lesMatchtmp = new ArrayList<Match>();  
 		
@@ -177,6 +177,8 @@ public class Match {
 			int idEquipe2 = tmp.getInt(4);
 			int idEquipeGagnante = tmp.getInt(5);
 			int idEquipePerdante = tmp.getInt(6);
+			
+
 			int tour = tmp.getInt(7);
 			
 			Equipe equipe1 = Equipe.getEquipeByID(idEquipe1);
@@ -187,25 +189,32 @@ public class Match {
 			if (idEquipe1 == idEquipeGagnante) {
 				equipeGagnante = equipe1;
 				equipePerdante = equipe2;
-			} else {
+			} else if (idEquipe2 == idEquipeGagnante) {
 				equipeGagnante = equipe2;
 				equipePerdante = equipe1;
 			}
 			
+			if (idEquipe1 == idEquipe2) {
+				equipeGagnante = equipe1;
+				equipePerdante = equipe1;
+			}
+			
 			Match unMatch = new Match(id_match, idConcours, equipe1, equipe2, tour, equipeGagnante, equipePerdante);
+			
 			lesMatchtmp.add(unMatch);
+			
+			
 		}
-		Match[] lesMatch = new Match[lesMatchtmp.size()];
-		int i = 0;
+
+		return lesMatchtmp;
 		
-		for (Match tmpMatch : lesMatchtmp) {
-			lesMatch[i] = tmpMatch;
-			i++;
-		}
-		// Pour chaque match, mettre dans le tableau puis retournera le tableau
-		
-		return lesMatch;
-		
+	}
+
+	@Override
+	public String toString() {
+		return "Match [idConcours=" + idConcours + ", idMatch=" + idMatch + ", equipe1=" + equipe1 + ", equipe2="
+				+ equipe2 + ", equipegagnante=" + equipegagnante + ", equipePerdante=" + equipePerdante
+				+ ", ConcoursTourNum=" + ConcoursTourNum + "]";
 	}
 
 }

@@ -1,42 +1,36 @@
 package View;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import Model.Concours;
 import Model.Equipe;
 import Model.Match;
-import Model.modeleJoueur;
-import Model.modeleMatch;
-
-import javax.swing.JLabel;
-import java.awt.GridLayout;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class FGestionConcours extends JFrame {
 	
-	private modeleMatch tableModeleMatch = null;
-	private JTable tableMatch = null;
+	public static DefaultListModel<Match> modeleMatch = new DefaultListModel();
+	private JList listMatch = new JList(modeleMatch);
 
 	/**
 	 * Launch the application.
@@ -55,6 +49,37 @@ public class FGestionConcours extends JFrame {
 			}
 		});
 	}
+	
+private class affichageMatch extends DefaultListCellRenderer {
+		
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			
+			
+			Match pMatch = (Match) value; // On récupère l'objet (un Joueur dans ce cas)
+			
+			String pgagnant = "Non défini";
+			
+			
+			if (pMatch.getEquipegagnante() != null) {
+				pgagnant = pMatch.getEquipegagnante().getNomEquipe();
+				
+				if (pMatch.getEquipegagnante().equals(pMatch.getEquipePerdante())) {
+					pgagnant = pMatch.getEquipegagnante().getNomEquipe() + " (Match blanc)";
+				}
+			}
+			
+			String labelText = pMatch.getIdMatch() + " - Tour " + pMatch.getConcoursTourNum() + " - " + pMatch.getEquipe1().getNomEquipe() + " vs " + pMatch.getEquipe2().getNomEquipe() + " - Gagnant : " + pgagnant;
+			setText(labelText); // On l'affiche
+
+			list.repaint(); // On rafraichi la liste
+
+			return this;
+		}
+
+	}
 
 	/**
 	 * Create the frame.
@@ -62,8 +87,6 @@ public class FGestionConcours extends JFrame {
 	 */
 	public FGestionConcours(Concours leConcours) throws SQLException {
 		
-		tableModeleMatch = new modeleMatch(leConcours.getConcNum());
-		tableMatch = new JTable(tableModeleMatch);
 		
 		setTitle("Gestion du concours");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,14 +187,7 @@ public class FGestionConcours extends JFrame {
 		lblListeDesMatchs.setBounds(337, 50, 167, 16);
 		getContentPane().add(lblListeDesMatchs);
 		
-		
-		tableMatch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableMatch.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tableMatch.setBounds(343, 91, 495, 280);
-			
-		JScrollPane scrollPane = new JScrollPane(tableMatch);
-		scrollPane.setBounds(343, 71, 503, 338);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+
 		
 		
 		JLabel lblTourN = new JLabel("Tour n\u00B0");
@@ -183,7 +199,8 @@ public class FGestionConcours extends JFrame {
 		getContentPane().add(lblNumTour);
 		
 		JButton btnTourSuivant = new JButton("Tour suivant");
-		btnTourSuivant.setBounds(509, 422, 158, 25);
+		btnTourSuivant.setEnabled(false);
+		btnTourSuivant.setBounds(667, 430, 158, 25);
 		getContentPane().add(btnTourSuivant);
 		
 		JLabel lblEquipeGagnante = new JLabel("Equipe gagnante :");
@@ -201,6 +218,20 @@ public class FGestionConcours extends JFrame {
 		JLabel lblTournoiTerminReponse = new JLabel("Faux");
 		lblTournoiTerminReponse.setBounds(139, 452, 109, 16);
 		getContentPane().add(lblTournoiTerminReponse);
+		
+		listMatch.setBounds(343, 96, 495, 293);
+		getContentPane().add(listMatch);
+		listMatch.setCellRenderer(new affichageMatch()); // Permet de modifier l'affichage des JList
+		
+		ArrayList<Match> lesmatchDebut = Match.getAllMatchOfConcours(leConcours.getConcNum());
+		for (Match unMatch : lesmatchDebut) {
+			modeleMatch.addElement(unMatch);
+		}
+		
+		JButton btnDfinirGagnant = new JButton("D\u00E9finir gagnant du match");
+		btnDfinirGagnant.setEnabled(false);
+		btnDfinirGagnant.setBounds(387, 408, 200, 47);
+		getContentPane().add(btnDfinirGagnant);
 		
 		if (leConcours.getConcTourNum() == 0) {
 			btnCrationEquipe.setEnabled(true);
@@ -225,7 +256,18 @@ public class FGestionConcours extends JFrame {
 		btnTourSuivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					leConcours.equipeEnListe();
+					
+					leConcours.increaseTourNum();
+					
+					
+					ArrayList<Match> matchDepart = Match.randomizeRencontre(leConcours.equipeEnListe(), leConcours);
+					
+					System.out.println(matchDepart.size());
+					
+					for (Match unMatch : matchDepart){
+						modeleMatch.addElement(unMatch);
+					}
+					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -239,13 +281,77 @@ public class FGestionConcours extends JFrame {
 					leConcours.increaseTourNum();
 					ArrayList<Match> matchDepart = Match.randomizeRencontre(Equipe.getAllEquipeByConcoursID(leConcours.getConcNum()), leConcours);
 					
-					modeleMatch.addMatch(matchDepart);
+					for (Match unMatch : matchDepart){
+						modeleMatch.addElement(unMatch);
+					}
+					
 					
 					btnTourSuivant.setEnabled(true);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
+		});
+		
+		listMatch.addListSelectionListener(new ListSelectionListener() {
+
+	            public void valueChanged(ListSelectionEvent arg0) {
+	                	Match pMatch = (Match) listMatch.getSelectedValue();
+	                	
+	                	if (pMatch.getEquipe1().getIdEquipe() == pMatch.getEquipe2().getIdEquipe()) {
+	                		btnDfinirGagnant.setEnabled(false);
+	                	} else {
+	                		btnDfinirGagnant.setEnabled(true);
+	                	}
+	                	
+	                	int pSize = modeleMatch.getSize();
+	                	boolean tourSuivant = true;
+	                	
+	                	for (int a = 0; a < pSize; a++) {
+	                		Match unMatch = (Match) modeleMatch.get(a);
+	                		if (unMatch.getEquipegagnante() == null) {
+	                			tourSuivant = false;
+	                		}
+	                	}
+	                	
+	                	btnTourSuivant.setEnabled(tourSuivant);
+	                	
+	                	
+	            }
+
+
+	        });
+		
+		listMatch.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				int pSize = modeleMatch.getSize();
+            	boolean tourSuivant = true;
+            	
+            	for (int a = 0; a < pSize; a++) {
+            		Match unMatch = (Match) modeleMatch.get(a);
+            		if (unMatch.getEquipegagnante() == null) {
+            			tourSuivant = false;
+            		}
+            	}
+            	
+            	btnTourSuivant.setEnabled(tourSuivant);
+				
+			}
+			
+		});
+		
+		btnDfinirGagnant.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Match pMatch = (Match) listMatch.getSelectedValue();
+				
+				FSelectionGagnantMatch frameGestionGagnant = null;
+				frameGestionGagnant = new FSelectionGagnantMatch(pMatch);
+				frameGestionGagnant.setVisible(true);
+				
 			}
 		});
 		
