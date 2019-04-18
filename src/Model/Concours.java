@@ -31,6 +31,25 @@ public class Concours {
 		
 	}
 	
+	public Concours(int pID, String ConcNom, Date concDate, String concNature, int concCat, String concSexe) {
+
+		this.ConcNom = ConcNom;
+		this.ConcDate = concDate;
+		this.ConcNature = concNature;
+		
+		if (concCat == 1) {
+			this.ConcCat = "Enfant";
+		} else if (concCat == 2) {
+			this.ConcCat = "Adulte";
+		} else if (concCat == 3) {
+			this.ConcCat = "Senior";
+		}
+		
+		this.ConcSexe = concSexe;
+		this.ConcNum = pID;
+		
+	}
+	
 	public Concours(int pID, String ConcNom, Date concDate, String concNature, String concCat, String concSexe, int concTourNum, int ConcTermineBool) {
 
 		this.ConcNom = ConcNom;

@@ -163,7 +163,7 @@ public class FConcours extends JFrame {
 					
 					int ID = pId.getInt(1);
 					bdd.fermerConnexion();
-					Concours concours = new Concours(ID, nom,dateDB, pnature, String.valueOf(categorie), sexe);
+					Concours concours = new Concours(ID, nom,dateDB, pnature, categorie, sexe);
 					FGestionConcours frameGestionConcours=new FGestionConcours(concours);
 					frameGestionConcours.setVisible(true);
 					
